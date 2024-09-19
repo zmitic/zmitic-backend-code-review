@@ -1,0 +1,41 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Doctrine\ORM;
+
+/**
+ * @template T
+ */
+abstract class AbstractQuery
+{
+    /**
+     * @phpstan-param string|null $hydrationMode
+     * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
+     *
+     * @return ($hydrationMode is 1|null ? array<array-key, T> : mixed)
+     */
+    public function getResult($hydrationMode = self::HYDRATE_OBJECT)
+    {
+    }
+
+    /**
+     * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
+     *
+     * @return (
+     *    $hydrationMode is 1|null
+     *    ? null|T
+     *    : mixed
+     * )
+     */
+    public function getOneOrNullResult(string|int|null $hydrationMode = null)
+    {}
+
+    /**
+     * @psalm-param string|AbstractQuery::HYDRATE_*|null $hydrationMode
+     *
+     * @return ($hydrationMode is 1|null ? T : mixed)
+     */
+    public function getSingleResult(string|int|null $hydrationMode = null)
+    {}
+}

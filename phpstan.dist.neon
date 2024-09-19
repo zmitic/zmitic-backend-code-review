@@ -1,8 +1,14 @@
 parameters:
-    level: 9
+    level: max
     paths:
-        - bin/
-        - config/
-        - public/
         - src/
         - tests/
+    stubFiles:
+        - stubs/Doctrine/Bundle/DoctrineBundle/Repository/ServiceEntityRepositoryProxy.stubphp
+        - stubs/Doctrine/ORM/AbstractQuery.stubphp
+        - stubs/Doctrine/ORM/EntityRepository.stubphp
+        - stubs/Doctrine/ORM/Query.stubphp
+        - stubs/Doctrine/ORM/QueryBuilder.stubphp
+        - stubs/Doctrine/ORM/ServiceEntityRepositoryProxy.stubphp
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon

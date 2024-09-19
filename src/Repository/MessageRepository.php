@@ -1,19 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Repository;
 
 use App\Entity\Message;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Message>
- *
- * @method Message|null find($id, $lockMode = null, $lockVersion = null)
- * @method Message|null findOneBy(array $criteria, array $orderBy = null)
- * @method Message[]    findAll()
- * @method Message[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class MessageRepository extends ServiceEntityRepository
 {
@@ -21,21 +16,27 @@ class MessageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Message::class);
     }
-    
-    public function by(Request $request): array
+
+    /**
+     * @param array<array-key, mixed> $filters
+     *
+     * @return array<int, Message>
+     */
+    public function by(array $filters): array
     {
-        $status = $request->query->get('status');
-        
-        if ($status) {
-            $messages = $this->getEntityManager()
-                ->createQuery(
-                    sprintf("SELECT m FROM App\Entity\Message m WHERE m.status = '%s'", $status)
-                )
-                ->getResult();
-        } else {
-            $messages = $this->findAll();
+        $status = $filters['status'] ?? null;
+        if (null === $status || '' === $status) {
+            return $this->findAll();
         }
-        
-        return $messages;
+
+        $expressionBuilder = $this->getEntityManager()->getExpressionBuilder();
+
+        return $this->createQueryBuilder('message')
+//            ->where('message.status = :status') // simpler, but doesn't allow nesting of complex queries
+            ->where(
+                $expressionBuilder->eq('message.status', ':status'),
+            )
+            ->setParameter('status', $status)
+            ->getQuery()->getResult();
     }
 }

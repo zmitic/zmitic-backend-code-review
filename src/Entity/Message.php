@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Entity;
 
@@ -29,6 +30,11 @@ class Message
     
     #[ORM\Column(type: 'datetime')]
     private DateTime $createdAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+    }
 
     public function getId(): ?int
     {

@@ -29,6 +29,11 @@ paths:
                     type: "array"
                     items:
                       type: "object"
+                      additionalProperties: false
+                      required:
+                        - uuid
+                        - text
+                        - status
                       properties:
                         uuid: 
                           type: "string"

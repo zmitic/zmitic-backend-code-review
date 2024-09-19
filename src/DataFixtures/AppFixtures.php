@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\DataFixtures;
 
@@ -15,7 +16,7 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create();
         
-        foreach (range(1, 10) as $i) {
+        foreach (range(1, 10) as $_i) {
             $message = new Message();
             $message->setUuid(Uuid::v6()->toRfc4122());
             $message->setText($faker->sentence);
